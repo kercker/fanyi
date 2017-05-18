@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: UTF-8 -*-
+# copied from https://github.com/MrS0m30n3/google-translate/blob/master/google_translate/tk_generator.py
 
 """This module creates the TK GET parameter for Google translate.
 
