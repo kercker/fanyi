@@ -39,7 +39,11 @@ def iciba(word):
             'w': word}
     res = requests.post(url, data=data, headers=headers)
     res = json.loads(res.content)
-    return res['content']['word_mean'][0]
+    if 'word_mean' in res['content']:
+        ret = res['content']['word_mean'][0]
+    else:
+        ret = res['content']['ciba_out']
+    return ret
 
 def baidu(word):
     url = 'https://fanyi.baidu.com/v2transapi'
