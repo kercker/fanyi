@@ -39,11 +39,14 @@ def iciba(word):
             'w': word}
     res = requests.post(url, data=data, headers=headers)
     res = json.loads(res.content)
-    if 'word_mean' in res['content']:
-        ret = res['content']['word_mean'][0]
-    else:
-        ret = res['content']['ciba_out']
-    return ret
+    try:
+        if 'word_mean' in res['content']:
+            ret = res['content']['word_mean'][0]
+        else:
+            ret = res['content']['ciba_out']
+        return ret
+    except KeyError:
+        return None
 
 def baidu(word):
     url = 'https://fanyi.baidu.com/v2transapi'
@@ -58,7 +61,10 @@ def baidu(word):
             } 
     res = requests.post(url, data=data, headers=headers)
     res = json.loads(res.content)
-    return res['trans_result']['data'][0]['dst']
+    try:
+        return res['trans_result']['data'][0]['dst']
+    except KeyError:
+        return None
 
 def bing(word):
     url = (
@@ -91,7 +97,10 @@ def bing(word):
         pickle.dump(sess, f)
     res = sess.post(url, json=[{'text':word}])
     res = json.loads(res.content)
-    return res['items'][0]['text']
+    try:
+        return res['items'][0]['text']
+    except KeyError:
+        return None
 
 def ydenc(word):
     u = 'fanyideskweb'
@@ -131,7 +140,10 @@ def youdao(word):
             'X-Requested-With': 'XMLHttpRequest'}
     res = requests.post(url, data=data, headers=headers)
     res = json.loads(res.content)
-    return res['translateResult'][0][0]['tgt']
+    try:
+        return res['translateResult'][0][0]['tgt']
+    except KeyError:
+        return None
 
 def google(word):
     tk = get_tk(word)
@@ -151,7 +163,10 @@ def google(word):
             'User-Agent': UA}
     res = requests.get(url, headers=headers)
     res = json.loads(res.content)
-    return res[0][0][0]
+    try:
+        return res[0][0][0]
+    except KeyError:
+        return None
 
 def fanyi(word):
     print 'iciba:', iciba(word)
