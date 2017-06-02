@@ -37,6 +37,7 @@ def iciba(word):
             't': 'auto',
             'w': word
             }
+
     res = requests.post(url, data=data, headers=headers)
     res = json.loads(res.content)
     try:
@@ -51,14 +52,16 @@ def iciba(word):
 def baidu(word):
     url = 'https://fanyi.baidu.com/v2transapi'
     headers = { 
-        'User-Agent': UA,
-        'Referer': 'https://fanyi.baidu.com/'}
+            'User-Agent': UA,
+            'Referer': 'https://fanyi.baidu.com/'
+            }
     data = {
             'from':'en',
             'to': 'zh',
             'query': word,
             'simple_means_flag': '3'
             } 
+
     res = requests.post(url, data=data, headers=headers)
     res = json.loads(res.content)
     try:
@@ -78,7 +81,11 @@ def bing(word):
         res = sess.post(url, json=[{'text':word}])
         if res.status_code == 200:
             res = json.loads(res.content)
-            return res['items'][0]['text']
+            try:
+                return res['items'][0]['text']
+            except KeyError:
+                return None
+
     sess = requests.Session()
     headers = {
             'Accept': 'application/json, text/javascript, */*; q=0.01',
@@ -91,7 +98,9 @@ def bing(word):
             'Pragma': 'no-cache',
             'Referer': 'https://www.bing.com/translator',
             'User-Agent': UA,
-            'X-Requested-With': 'XMLHttpRequest'}
+            'X-Requested-With': 'XMLHttpRequest'
+            }
+
     res = sess.get('https://www.bing.com/translator', headers=headers)
     with open(bingsess, 'w') as f:
         pickle.dump(sess, f)
@@ -116,6 +125,16 @@ def youdao(word):
             '?smartresult=dict&smartresult=rule&sessionFrom=null'
             )
     f, g = ydenc(word)
+    headers = {
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Host': 'fanyi.youdao.com',
+            'Referer': 'http://fanyi.youdao.com/',
+            'User-Agent': UA,
+            'X-Requested-With': 'XMLHttpRequest'
+            }
     data = {
             'i': word,
             'from': 'AUTO',
@@ -128,16 +147,9 @@ def youdao(word):
             'version': '2.1',
             'keyfrom': 'fanyi.web',
             'action': 'FY_BY_CLICKBUTTON',
-            'typoResult': 'true'}
-    headers = {
-            'Accept': 'application/json, text/javascript, */*; q=0.01',
-            'Accept-Encoding': 'gzip, deflate',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'Host': 'fanyi.youdao.com',
-            'Referer': 'http://fanyi.youdao.com/',
-            'User-Agent': UA,
-            'X-Requested-With': 'XMLHttpRequest'}
+            'typoResult': 'true'
+            }
+
     res = requests.post(url, data=data, headers=headers)
     res = json.loads(res.content)
     try:
@@ -160,7 +172,9 @@ def google(word):
             'Connection': 'keep-alive',
             'Host': 'translate.google.com',
             'Referer': 'https://translate.google.com/',
-            'User-Agent': UA}
+            'User-Agent': UA
+            }
+
     res = requests.get(url, headers=headers)
     res = json.loads(res.content)
     try:
