@@ -26,7 +26,6 @@ def iciba(word):
             'Accept-Encoding': 'gzip, deflate',
             'Accept-Language': 'en-US,en;q=0.5',
             'Connection': 'keep-alive',
-            'Content-Length': '38',
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
             'Host': 'fy.iciba.com',
             'Referer': 'http://fy.iciba.com/',
