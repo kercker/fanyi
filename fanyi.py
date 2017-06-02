@@ -18,6 +18,29 @@ UA = (
         ' Gecko/20100101 Firefox/53.0'
         )
 
+
+def iciba(word):
+    url = 'http://fy.iciba.com/ajax.php?a=fy'
+    headers = { 
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Connection': 'keep-alive',
+            'Content-Length': '38',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Host': 'fy.iciba.com',
+            'Referer': 'http://fy.iciba.com/',
+            'User-Agent': UA,
+            'X-Requested-With': 'XMLHttpRequest'
+            }
+    data = {
+            'f': 'auto',
+            't': 'auto',
+            'w': word}
+    res = requests.post(url, data=data, headers=headers)
+    res = json.loads(res.content)
+    return res['content']['word_mean'][0]
+
 def baidu(word):
     url = 'https://fanyi.baidu.com/v2transapi'
     headers = { 
@@ -127,6 +150,7 @@ def google(word):
     return res[0][0][0]
 
 def fanyi(word):
+    print 'iciba:', iciba(word)
     print 'baidu:', baidu(word)
     print 'youdao:', youdao(word)
     print 'bing:', bing(word)
