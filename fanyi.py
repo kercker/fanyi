@@ -35,7 +35,8 @@ def iciba(word):
     data = {
             'f': 'auto',
             't': 'auto',
-            'w': word}
+            'w': word
+            }
     res = requests.post(url, data=data, headers=headers)
     res = json.loads(res.content)
     try:
