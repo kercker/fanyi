@@ -1,11 +1,14 @@
 # -*- encoding: utf-8 -*-
 
+import codecs
 import json
 import os
 import pickle
 import random
 import time
 import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 from hashlib import md5
 from os import path
@@ -15,6 +18,7 @@ import requests
 from tk_generator import get_tk
 
 CURDIR = path.dirname(path.abspath(__file__))
+TRANS = path.join(CURDIR, 'trans')
 UA = (
         'Mozilla/5.0 (X11; Ubuntu; Linux i686; rv:53.0)'
         ' Gecko/20100101 Firefox/53.0'
@@ -185,11 +189,22 @@ def google(word):
         return None
 
 def fanyi(word):
-    print 'iciba:', iciba(word)
-    print 'baidu:', baidu(word)
-    print 'youdao:', youdao(word)
-    print 'bing:', bing(word)
-    print 'google', google(word)
+    result = {
+                'iciba': iciba(word),
+                'baidu': baidu(word),
+                'youdao': youdao(word),
+                'bing': bing(word),
+                'google': google(word)
+            }
+    rsave = {word: result}
+    wordfn = path.join(TRANS, u'%s.json' % word.replace(u' ', u'_'))
+    with codecs.open(wordfn, 'w', encoding='utf8') as f:
+        json.dump(rsave, f, indent=2, ensure_ascii=False)
+
+    for key, trans in result.iteritems():
+        print u'%s: %s' % (key, trans)
 
 if __name__ == '__main__':
+    if not os.access(TRANS, os.F_OK):
+        os.mkdir(TRANS)
     fanyi(sys.argv[1])
